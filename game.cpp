@@ -15,6 +15,7 @@ namespace std {
     }
 }
 
+
 Game::Game() : window(sf::VideoMode(800, 600), "Boxer Interview Game"), questions({
     "Tell me about yourself.",
     "What do you know about our company?",
@@ -36,21 +37,19 @@ void Game::render() {
 
 void Game::chooseBoxer() {
     std::vector<std::unique_ptr<Boxer>> boxers;
-   
- boxers.emplace_back(std::make_unique<AngryBoxer>());
+    boxers.emplace_back(std::make_unique<AngryBoxer>());
     boxers.emplace_back(std::make_unique<NonchalantBoxer>());
     boxers.emplace_back(std::make_unique<ShortBoxer>());
-};
 
     std::cout << "Choose your boxer:\n";
     for (size_t i = 0; i < boxers.size(); ++i) {
-        std::cout << i + 1 << ". " << boxers[i].getName() << "\n";
+        std::cout << i + 1 << ". " << boxers[i]->getName() << "\n";
     }
 
     int choice;
     std::cin >> choice;
     
-     currentBoxer = std::move(boxers[choice - 1]);
+     boxers[choice - 1].release();
 
     std::cout << "You chose " << currentBoxer->getName() << "!\n";
 }
