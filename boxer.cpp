@@ -1,11 +1,7 @@
 #include <iostream>
+#define BOXER_H
+#define BOXER_H
 #include <string>
-#include <vector>
-#include <cstdlib>
-#include <ctime>
-#include <cassert>
-#include <SFML/Graphics.hpp>
-#include <SFML/Window.hpp>
 
 class Boxer {
 public:
