@@ -1,26 +1,16 @@
 
-#include <iostream>
-#include <string>
-#include <vector>
-#include <cstdlib>
-#include <ctime>
-#include <cassert>
+#include "player.h"
 
-class Player {
-private:
-    int health;
+    Player::Player() : health(100) {};
 
-public:
-    Player() : health(100) {}
-
-    int getHealth() const { return health; }
-    void decreaseHealth(int amount) {
+    int Player::getHealth() const { return health; }
+    void Player::decreaseHealth(int amount) {
         health -= amount;
         if (health < 0) health = 0;
     }
-    void increaseHealth(int amount) {
+    void Player::increaseHealth(int amount) {
         health += amount;
         if (health > 100) health = 100;
     }
-};
+
 

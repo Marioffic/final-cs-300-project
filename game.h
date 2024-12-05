@@ -1,8 +1,8 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include "Player.h"
-#include "Boxer.h"
+#include "player.h"
+#include "boxer.h"
 #include <vector>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
@@ -14,13 +14,13 @@ private:
     std::vector<std::string> questions;
     sf::RenderWindow window;
 
-    oid initializeQuestions();
+    void initializeQuestions();
     void render();
 
     public:
-    Game();
-    void chooseBoxer();
-    void play();
+        Game();
+        void chooseBoxer();
+        void play();
 };
 
 #endif 

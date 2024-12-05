@@ -1,4 +1,4 @@
-#include "Boxer.h"
+#include "boxer.h"
 
 Boxer::Boxer(const std::string& name, Type type, const std::string& punchType)
     : name(name), type(type), angerMeter(0), appreciationMeter(0), punchType(punchType) {}
