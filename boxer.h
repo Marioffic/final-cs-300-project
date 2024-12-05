@@ -23,13 +23,6 @@ public:
     int getAppreciationMeter() const { return appreciationMeter; }
     const std::string& getPunchType() const { return punchType; }
 
-    void increaseAnger(int amount) {
-        angerMeter += amount;
-        if (angerMeter > 100) angerMeter = 100;
-    }
-
-    void increaseAppreciation(int amount) {
-        appreciationMeter += amount;
-        if (appreciationMeter > 100) appreciationMeter = 100;
-    }
+     void increaseAnger(int amount);
+    void increaseAppreciation(int amount);
 };
