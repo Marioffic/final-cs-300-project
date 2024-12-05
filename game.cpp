@@ -1,9 +1,19 @@
 #include "game.h"
+#include "angry_boxer.h"
+#include "nonchalant_boxer.h"
+#include "short_boxer.h"
+#include "game.h"
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
+#include <memory>
 
-
+namespace std {
+    template <typename T, typename... Args>
+    std::unique_ptr<T> make_unique(Args&&... args) {
+        return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
+    }
+}
 
 Game::Game() : window(sf::VideoMode(800, 600), "Boxer Interview Game"), questions({
     "Tell me about yourself.",
@@ -25,10 +35,11 @@ void Game::render() {
 }
 
 void Game::chooseBoxer() {
-    std::vector<Boxer> boxers = {
-    Boxer("Angry Avery", Boxer::Type::Angry, "Uppercut"),
-    Boxer("Chill Charlie", Boxer::Type::Nonchalant, "Jab"),
-    Boxer("Tiny Tim", Boxer::Type::Short, "Low Punch")
+    std::vector<std::unique_ptr<Boxer>> boxers;
+   
+ boxers.emplace_back(std::make_unique<AngryBoxer>());
+    boxers.emplace_back(std::make_unique<NonchalantBoxer>());
+    boxers.emplace_back(std::make_unique<ShortBoxer>());
 };
 
     std::cout << "Choose your boxer:\n";
@@ -38,7 +49,8 @@ void Game::chooseBoxer() {
 
     int choice;
     std::cin >> choice;
-    currentBoxer = &boxers[choice - 1];
+    
+     currentBoxer = std::move(boxers[choice - 1]);
 
     std::cout << "You chose " << currentBoxer->getName() << "!\n";
 }
@@ -55,7 +67,8 @@ void Game::play() {
         std::cin >> questionIndex;
         --questionIndex;
 
-        std::cout << currentBoxer->getName() << " responds: ...\n"; // Add dynamic response logic
+        std::cout << currentBoxer->getName() << " responds: ... "
+        << currentBoxer->respondToQuestion(questions[questionIndex]) << "\n";
 
         std::cout << "Choose your response:\n"
                   << "1. Good answer, you’ll fit right in here\n"
@@ -65,6 +78,8 @@ void Game::play() {
 
         int response;
         std::cin >> response;
+
+        std::cout << currentBoxer->reactToResponse(response) << "\n";
 
         if (response == 1 || response == 3) {
             currentBoxer->increaseAppreciation(20);
