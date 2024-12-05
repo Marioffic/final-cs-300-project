@@ -1,7 +1,7 @@
 #include <iostream>
 #ifndef BOXER_H
 #define BOXER_H
-#define BOXER_H
+
 #include <string>
 
 class Boxer {
@@ -16,10 +16,13 @@ public:
     int getAppreciationMeter() const;
     const std::string& getPunchType() const;
 
+    void increaseAnger(int amount);
+    void increaseAppreciation(int amount);
+
     virtual std::string respondToQuestion(const std::string& question) = 0;
     virtual std::string reactToResponse(int response) = 0;
 
-    virtual ~Boxer() = default
+    virtual ~Boxer() = default;
 protected:
     std::string name;
     Type type;
