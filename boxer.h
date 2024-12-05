@@ -10,16 +10,17 @@ public:
 
     Boxer(const std::string& name, Type type, const std::string& punchType);
 
-    const std::string& getName() const { return name; }
-    Type getType() const { return type; }
-    int getAngerMeter() const { return angerMeter; }
-    int getAppreciationMeter() const { return appreciationMeter; }
-    const std::string& getPunchType() const { return punchType; }
+    const std::string& getName() const;
+    Type getType() const;
+    int getAngerMeter() const;
+    int getAppreciationMeter() const;
+    const std::string& getPunchType() const;
 
-    void increaseAnger(int amount);
-    void increaseAppreciation(int amount);
+    virtual std::string respondToQuestion(const std::string& question) = 0;
+    virtual std::string reactToResponse(int response) = 0;
 
-private:
+    virtual ~Boxer() = default
+protected:
     std::string name;
     Type type;
     int angerMeter;

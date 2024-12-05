@@ -3,24 +3,21 @@
 #include <cstdlib>
 #include <ctime>
 
-Game::Game() : window(sf::VideoMode(800, 600), "Boxer Interview Game") {
-    initializeQuestions();
-}
 
-void Game::initializeQuestions() {
-    questions = {
-        "Tell me about yourself.",
-        "What do you know about our company?",
-        "What are your strengths?",
-        "What are your weaknesses?",
-        "Why should we hire you?",
-        "Where do you see yourself in five years?",
-        "Why are you leaving your current job?",
-        "What motivates you?",
-        "What are your salary expectations?",
-        "Why do you want to work here?"
-    };
-}
+
+Game::Game() : window(sf::VideoMode(800, 600), "Boxer Interview Game"), questions({
+    "Tell me about yourself.",
+    "What do you know about our company?",
+    "What are your strengths?",
+    "What are your weaknesses?",
+    "Why should we hire you?",
+    "Where do you see yourself in five years?",
+    "Why are you leaving your current job?",
+    "What motivates you?",
+    "What are your salary expectations?",
+    "Why do you want to work here?"
+}) {}
+
 
 void Game::render() {
     window.clear();
@@ -29,10 +26,10 @@ void Game::render() {
 
 void Game::chooseBoxer() {
     std::vector<Boxer> boxers = {
-        Boxer("Angry Bob", Boxer::Angry, "Uppercut"),
-        Boxer("Chill Charlie", Boxer::Nonchalant, "Jab"),
-        Boxer("Tiny Tim", Boxer::Short, "Low Punch")
-    };
+    Boxer("Angry Avery", Boxer::Type::Angry, "Uppercut"),
+    Boxer("Chill Charlie", Boxer::Type::Nonchalant, "Jab"),
+    Boxer("Tiny Tim", Boxer::Type::Short, "Low Punch")
+};
 
     std::cout << "Choose your boxer:\n";
     for (size_t i = 0; i < boxers.size(); ++i) {
