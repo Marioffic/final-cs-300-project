@@ -1,3 +1,12 @@
+#ifndef GAME_H
+#define GAME_H
+
+#include "Player.h"
+#include "Boxer.h"
+#include <vector>
+#include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
+
 class Game {
 private:
     Player player;

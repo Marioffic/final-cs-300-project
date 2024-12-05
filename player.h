@@ -5,8 +5,6 @@
 #include <cstdlib>
 #include <ctime>
 #include <cassert>
-#include <SFML/Graphics.hpp>
-#include <SFML/Window.hpp>
 
 class Player {
 private:
