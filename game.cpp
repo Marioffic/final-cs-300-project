@@ -68,7 +68,7 @@ void Game::chooseBoxer() {
         }
 }
 
-// Display a question and collect the player's choice
+
 void Game::displayQuestionAndCollectAnswer() {
     if (!fontLoaded) return;
 
@@ -87,7 +87,7 @@ void Game::displayQuestionAndCollectAnswer() {
     while (window.isOpen()) {
         window.clear(sf::Color::Black);
 
-        // Display questions
+ 
         for (size_t i = 0; i < questions.size(); ++i) {
             questionText.setString(std::to_string(i + 1) + ". " + questions[i]);
             questionText.setPosition(50.f, i * 30.f + 50.f);
@@ -142,7 +142,7 @@ void Game::displayQuestionAndCollectAnswer() {
                                     // React to the player's response
                                     std::string boxerReaction = currentBoxer->reactToResponse(responseIndex + 1);
                                     displayResponse(boxerReaction);
-                                    return; // Exit after player reacts
+                                    return; 
                                 }
                             }
                         }
@@ -154,7 +154,6 @@ void Game::displayQuestionAndCollectAnswer() {
 }
 
 
-// Display the boxer's response
 void Game::handlePlayerReaction() {
     sf::Text responseText;
     responseText.setFont(font);
@@ -202,7 +201,7 @@ void Game::handlePlayerReaction() {
                     } else {
                         displayResponse(boxerReaction);
                     }
-                    return; // Exit after displaying reaction
+                    return; 
                 }
             }
         }
@@ -308,8 +307,7 @@ void Game::play() {
     }
 
     while (window.isOpen()) {
-        chooseBoxer(); // Allow the user to choose a boxer at the start or after completing an interview
-
+        chooseBoxer(); 
         questionCount = 0;
 
         while (player.getHealth() > 0) {
@@ -323,16 +321,16 @@ void Game::play() {
                 std::cin >> answer;
 
                 if (answer == "yes") {
-                    break; // Break out of the inner loop to choose another boxer
+                    break; 
                 } else {
-                    window.close(); // Close the game
+                    window.close(); 
                     return;
                 }
             }
         }
 
         if (!window.isOpen()) {
-            break; // Exit the game if the window is closed
+            break; 
         }
     }
 

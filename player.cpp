@@ -6,7 +6,7 @@
 #include <vector>
 #include <memory>
 #include "Boxer.h"
-#include "Player.h" // Make sure to include the Player header
+#include "Player.h" 
 
 class Game {
 private:
@@ -14,7 +14,7 @@ private:
     sf::Font font;
     bool fontLoaded;
     std::unique_ptr<Boxer> currentBoxer;
-    Player player;  // Add player object here
+    Player player;  
     std::vector<std::string> questions;
     int questionCount;
 
@@ -26,4 +26,4 @@ public:
     void play();
 };
 
-#endif // GAME_H
+#endif 

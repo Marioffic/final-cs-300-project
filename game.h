@@ -22,11 +22,11 @@ public:
     void chooseBoxer();
     void render();
     void displayQuestionAndCollectAnswer();
-    void displayResponse(const std::string& response); // Declaration added
+    void displayResponse(const std::string& response); 
     void handlePlayerReaction();
-    void displayPunch();  // Add this declaration
+    void displayPunch(); 
     void displayHug();
     void play();
 };
 
-#endif // GAME_H
+#endif 
