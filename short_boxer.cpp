@@ -1,5 +1,13 @@
 #include "short_boxer.h"
-
+/*!
+ * @brief Provides a response to a specific question.
+ * 
+ * This method returns a predefined response based on the question asked.
+ * If the question is not recognized, a generic response is returned.
+ * 
+ * @param question The question being asked.
+ * @return The boxer's response to the question.
+ */
 std::string ShortBoxer::respondToQuestion(const std::string& question) {
     if (question == "Tell me about yourself.") {
         return "I'm Tiny Tim, small but mighty. Don’t let the height fool you.";
@@ -24,6 +32,19 @@ std::string ShortBoxer::respondToQuestion(const std::string& question) {
     }
     return "I have no idea how to answer that.";
 }
+
+*!
+ * @brief Reacts to a player's response.
+ * 
+ * Based on the player's response, the ShortBoxer's anger or appreciation
+ * meter is increased. The method returns the boxer's reaction to the player's input.
+ * 
+ * - Response 4 or 2 increases anger to 100 and returns an aggressive reaction.
+ * - Response 1 or 3 increases appreciation to 100 and returns a positive reaction.
+ * 
+ * @param response The player's response (1, 2, 3, or 4).
+ * @return The boxer's reaction to the response.
+ */
 
 std::string ShortBoxer::reactToResponse(int response) {
     if (response == 4 || response == 2) {
