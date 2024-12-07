@@ -4,7 +4,13 @@
 #include "short_boxer.h"
 #include <iostream>
 
-// Constructor
+/*!
+ * @brief Constructs the Game object.
+ * 
+ * Initializes the game window, font, and questions. If the font fails to load,
+ * an error message is displayed.
+ */
+
 Game::Game() : window(sf::VideoMode(800, 600), "Boxer Interview Game"), questionCount(0), fontLoaded(false), questions({
     "Tell me about yourself.",
     "What do you know about our company?",
@@ -24,7 +30,12 @@ Game::Game() : window(sf::VideoMode(800, 600), "Boxer Interview Game"), question
     }
 }
 
-// Display the boxer selection screen
+/*!
+ * @brief Displays the boxer selection screen.
+ * 
+ * Allows the player to choose a boxer from a predefined list. 
+ * Once a boxer is selected, the method assigns it to `currentBoxer`.
+ */
 void Game::chooseBoxer() {
     sf::Text boxerText;
     boxerText.setFont(font);
@@ -68,7 +79,12 @@ void Game::chooseBoxer() {
         }
 }
 
-
+/*!
+ * @brief Displays the list of questions and handles player's choice.
+ * 
+ * Allows the player to select a question from a predefined list. After selecting a question,
+ * the boxer's response is displayed. The player can then respond to the boxer.
+ */
 void Game::displayQuestionAndCollectAnswer() {
     if (!fontLoaded) return;
 
@@ -153,7 +169,12 @@ void Game::displayQuestionAndCollectAnswer() {
     }
 }
 
-
+/*!
+ * @brief Displays the player's response options and handles the boxer's reaction.
+ * 
+ * The player selects one of four responses to the boxer's answer. The boxer's
+ * reaction (punch or hug) depends on their anger or appreciation meter.
+ */
 void Game::handlePlayerReaction() {
     sf::Text responseText;
     responseText.setFont(font);
@@ -208,7 +229,9 @@ void Game::handlePlayerReaction() {
     }
 }
 
-// Display the "you've been hugged" message
+/*!
+ * @brief Displays the "you've been hugged" message.
+ */
 void Game::displayHug() {
     sf::Text hugText;
     hugText.setFont(font);
@@ -234,7 +257,9 @@ void Game::displayHug() {
     }
 }
 
-// Display the "you've been punched" message
+/*!
+ * @brief Displays the "you've been punched" message.
+ */
 void Game::displayPunch() {
     sf::Texture punchTexture;
     if (!punchTexture.loadFromFile("punch.png")) {
