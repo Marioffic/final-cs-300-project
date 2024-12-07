@@ -26,11 +26,11 @@ std::string NonchalantBoxer::respondToQuestion(const std::string& question) {
 }
 
 std::string NonchalantBoxer::reactToResponse(int response) {
-    if (response == 4) {
-        increaseAnger(50);
+    if (response == 4 || response == 2) {
+        increaseAnger(100);
         return "Wow, harsh. But okay, whatever.";
     } else if (response == 1 || response == 3) {
-        increaseAppreciation(20);
+        increaseAppreciation(100);
         return "Thanks. That means a lot.";
     }
     return "Hmm, okay.";

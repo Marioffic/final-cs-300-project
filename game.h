@@ -1,26 +1,32 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include "player.h"
-#include "boxer.h"
-#include <vector>
 #include <SFML/Graphics.hpp>
-#include <SFML/Window.hpp>
+#include <vector>
+#include <memory>
+#include "boxer.h"
+#include "player.h"
 
 class Game {
 private:
-    Player player;
-    Boxer* currentBoxer;
-    std::vector<std::string> questions;
     sf::RenderWindow window;
+    sf::Font font;
+    bool fontLoaded;
+    std::unique_ptr<Boxer> currentBoxer;
+    Player player;
+    std::vector<std::string> questions;
+    int questionCount;
 
-    void initializeQuestions();
+public:
+    Game();
+    void chooseBoxer();
     void render();
-
-    public:
-        Game();
-        void chooseBoxer();
-        void play();
+    void displayQuestionAndCollectAnswer();
+    void displayResponse(const std::string& response); // Declaration added
+    void handlePlayerReaction();
+    void displayPunch();  // Add this declaration
+    void displayHug();
+    void play();
 };
 
-#endif 
+#endif // GAME_H

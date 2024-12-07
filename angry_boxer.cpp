@@ -1,5 +1,5 @@
 // AngryBoxer Implementation
-#include "angry_boxer.h";
+#include "angry_boxer.h"
 
 std::string AngryBoxer::respondToQuestion(const std::string& question) {
     if (question == "Tell me about yourself.") {
@@ -27,11 +27,11 @@ std::string AngryBoxer::respondToQuestion(const std::string& question) {
 }
 
 std::string AngryBoxer::reactToResponse(int response) {
-    if (response == 2) {
-        increaseAnger(30);
+    if (response == 2 || response == 2) {
+        increaseAnger(100);
         return "What did you mean by that? Are you mocking me?";
     } else if (response == 1 || response == 3) {
-        increaseAppreciation(20);
+        increaseAppreciation(100);
         return "Thanks. That means a lot.";
     }
     return "Hmm, okay.";

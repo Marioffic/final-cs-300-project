@@ -2,21 +2,10 @@
 #include "angry_boxer.h"
 #include "nonchalant_boxer.h"
 #include "short_boxer.h"
-#include "game.h"
 #include <iostream>
-#include <cstdlib>
-#include <ctime>
-#include <memory>
 
-namespace std {
-    template <typename T, typename... Args>
-    std::unique_ptr<T> make_unique(Args&&... args) {
-        return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
-    }
-}
-
-
-Game::Game() : window(sf::VideoMode(800, 600), "Boxer Interview Game"), questions({
+// Constructor
+Game::Game() : window(sf::VideoMode(800, 600), "Boxer Interview Game"), questionCount(0), fontLoaded(false), questions({
     "Tell me about yourself.",
     "What do you know about our company?",
     "What are your strengths?",
@@ -27,80 +16,324 @@ Game::Game() : window(sf::VideoMode(800, 600), "Boxer Interview Game"), question
     "What motivates you?",
     "What are your salary expectations?",
     "Why do you want to work here?"
-}) {}
-
-
-void Game::render() {
-    window.clear();
-    window.display();
+}) {
+    if (!font.loadFromFile("Roboto-Black.ttf")) {
+        std::cerr << "Failed to load font!\n";
+    } else {
+        fontLoaded = true;
+    }
 }
 
+// Display the boxer selection screen
 void Game::chooseBoxer() {
-    std::vector<std::unique_ptr<Boxer>> boxers;
-    boxers.emplace_back(std::make_unique<AngryBoxer>());
-    boxers.emplace_back(std::make_unique<NonchalantBoxer>());
-    boxers.emplace_back(std::make_unique<ShortBoxer>());
+    sf::Text boxerText;
+    boxerText.setFont(font);
+    boxerText.setCharacterSize(24);
+    boxerText.setFillColor(sf::Color::White);
+    boxerText.setStyle(sf::Text::Bold);
 
-    std::cout << "Choose your boxer:\n";
-    for (size_t i = 0; i < boxers.size(); ++i) {
-        std::cout << i + 1 << ". " << boxers[i]->getName() << "\n";
+    std::vector<std::string> boxers = {"Angry Avery", "Chill Charlie", "Tiny Tim"};
+
+    while (window.isOpen()) {
+        window.clear(sf::Color::Black);
+
+        for (size_t i = 0; i < boxers.size(); ++i) {
+            boxerText.setString(std::to_string(i + 1) + ". " + boxers[i]);
+            boxerText.setPosition(50.f, i * 50.f + 100.f);
+            window.draw(boxerText);
+        }
+
+        window.display();
+
+        sf::Event event;
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed) {
+                window.close();
+                return;
+            }
+
+             if (event.type == sf::Event::KeyPressed) {
+                int choice = event.key.code - sf::Keyboard::Num1;
+                if (choice == 0) {
+                    currentBoxer = std::unique_ptr<AngryBoxer>(new AngryBoxer());
+                } else if (choice == 1) {
+                    currentBoxer = std::unique_ptr<NonchalantBoxer>(new NonchalantBoxer());
+                } else if (choice == 2) {
+                    currentBoxer = std::unique_ptr<ShortBoxer>(new ShortBoxer());
+                }
+                    std::cout << "You chose " << currentBoxer->getName() << "!\n";
+                    return;
+                }
+            }
+        }
+}
+
+// Display a question and collect the player's choice
+void Game::displayQuestionAndCollectAnswer() {
+    if (!fontLoaded) return;
+
+    sf::Text questionText;
+    questionText.setFont(font);
+    questionText.setCharacterSize(24);
+    questionText.setFillColor(sf::Color::White);
+    questionText.setStyle(sf::Text::Bold);
+
+    sf::Text responseText;
+    responseText.setFont(font);
+    responseText.setCharacterSize(20);
+    responseText.setFillColor(sf::Color::Yellow);
+    responseText.setStyle(sf::Text::Italic);
+
+    while (window.isOpen()) {
+        window.clear(sf::Color::Black);
+
+        // Display questions
+        for (size_t i = 0; i < questions.size(); ++i) {
+            questionText.setString(std::to_string(i + 1) + ". " + questions[i]);
+            questionText.setPosition(50.f, i * 30.f + 50.f);
+            window.draw(questionText);
+        }
+
+        window.display();
+
+        sf::Event event;
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed) {
+                window.close();
+                return;
+            }
+
+            if (event.type == sf::Event::KeyPressed) {
+                int questionIndex = event.key.code - sf::Keyboard::Num1;
+                if (questionIndex >= 0 && questionIndex < static_cast<int>(questions.size())) {
+                    // Display the boxer's response
+                    std::string response = currentBoxer->respondToQuestion(questions[questionIndex]);
+                    displayResponse(response);
+
+                    // Display response choices
+                    std::vector<std::string> responses = {
+                        "1. Good answer, you'll fit right in here.",
+                        "2. Wow, that was something, huh?",
+                        "3. Interesting...",
+                        "4. Maybe go back to boxing?"
+                    };
+
+                    while (window.isOpen()) {
+                        window.clear(sf::Color::Black);
+
+                        for (size_t i = 0; i < responses.size(); ++i) {
+                            responseText.setString(responses[i]);
+                            responseText.setPosition(50.f, i * 30.f + 300.f);
+                            window.draw(responseText);
+                        }
+
+                        window.display();
+
+                        sf::Event responseEvent;
+                        while (window.pollEvent(responseEvent)) {
+                            if (responseEvent.type == sf::Event::Closed) {
+                                window.close();
+                                return;
+                            }
+
+                            if (responseEvent.type == sf::Event::KeyPressed) {
+                                int responseIndex = responseEvent.key.code - sf::Keyboard::Num1;
+                                if (responseIndex >= 0 && responseIndex < static_cast<int>(responses.size())) {
+                                    // React to the player's response
+                                    std::string boxerReaction = currentBoxer->reactToResponse(responseIndex + 1);
+                                    displayResponse(boxerReaction);
+                                    return; // Exit after player reacts
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+// Display the boxer's response
+void Game::handlePlayerReaction() {
+    sf::Text responseText;
+    responseText.setFont(font);
+    responseText.setCharacterSize(20);
+    responseText.setFillColor(sf::Color::Yellow);
+    responseText.setStyle(sf::Text::Italic);
+
+    std::vector<std::string> responses = {
+        "1. Good answer, you'll fit right in here.",
+        "2. Wow, that was something, huh?",
+        "3. Interesting...",
+        "4. Maybe go back to boxing?"
+    };
+
+    while (window.isOpen()) {
+        window.clear(sf::Color::Black);
+
+        // Display response options
+        for (size_t i = 0; i < responses.size(); ++i) {
+            responseText.setString(responses[i]);
+            responseText.setPosition(50.f, i * 30.f + 300.f);
+            window.draw(responseText);
+        }
+
+        window.display();
+
+        sf::Event event;
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed) {
+                window.close();
+                return;
+            }
+
+            if (event.type == sf::Event::KeyPressed) {
+                int responseIndex = event.key.code - sf::Keyboard::Num1;
+                if (responseIndex >= 0 && responseIndex < static_cast<int>(responses.size())) {
+                    // React to the player's response
+                    std::string boxerReaction = currentBoxer->reactToResponse(responseIndex + 1);
+
+                    // Handle punch or hug based on anger or appreciation
+                    if (currentBoxer->getAngerMeter() >= 100) {
+                        displayPunch();
+                    } else if (currentBoxer->getAppreciationMeter() >= 100) {
+                        displayHug();
+                    } else {
+                        displayResponse(boxerReaction);
+                    }
+                    return; // Exit after displaying reaction
+                }
+            }
+        }
+    }
+}
+
+// Display the "you've been hugged" message
+void Game::displayHug() {
+    sf::Text hugText;
+    hugText.setFont(font);
+    hugText.setCharacterSize(32);
+    hugText.setFillColor(sf::Color::Green);
+    hugText.setStyle(sf::Text::Bold);
+    hugText.setString("YOU'VE BEEN HUGGED!");
+    hugText.setPosition(100.f, 300.f);
+
+    window.clear(sf::Color::Black);
+    window.draw(hugText);
+    window.display();
+
+    sf::Clock clock;
+    while (clock.getElapsedTime().asSeconds() < 3.0f) {
+        sf::Event event;
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed) {
+                window.close();
+                return;
+            }
+        }
+    }
+}
+
+// Display the "you've been punched" message
+void Game::displayPunch() {
+    sf::Texture punchTexture;
+    if (!punchTexture.loadFromFile("punch.png")) {
+        std::cerr << "Failed to load punch image!\n";
+        return;
     }
 
-    int choice;
-    std::cin >> choice;
-    
-     boxers[choice - 1].release();
+    sf::Sprite punchSprite(punchTexture);
+    punchSprite.setPosition(200.f, 200.f);
 
-    std::cout << "You chose " << currentBoxer->getName() << "!\n";
+    sf::Text punchText;
+    punchText.setFont(font);
+    punchText.setCharacterSize(32);
+    punchText.setFillColor(sf::Color::Red);
+    punchText.setStyle(sf::Text::Bold);
+    punchText.setString("YOU'VE BEEN PUNCHED!");
+    punchText.setPosition(100.f, 450.f);
+
+    window.clear(sf::Color::Black);
+    window.draw(punchSprite);
+    window.draw(punchText);
+    window.display();
+
+    sf::Clock clock;
+    while (clock.getElapsedTime().asSeconds() < 3.0f) {
+        sf::Event event;
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed) {
+                window.close();
+                return;
+            }
+        }
+    }
 }
 
+// Display the boxer's response
+void Game::displayResponse(const std::string& response) {
+    sf::Text responseText;
+    responseText.setFont(font);
+    responseText.setCharacterSize(24);
+    responseText.setFillColor(sf::Color::Yellow);
+    responseText.setStyle(sf::Text::Bold);
+    responseText.setString(response);
+    responseText.setPosition(50.f, 300.f);
+
+    window.clear(sf::Color::Black);
+    window.draw(responseText);
+    window.display();
+
+    sf::Clock clock;
+    while (clock.getElapsedTime().asSeconds() < 3.0f) {
+        sf::Event event;
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed) {
+                window.close();
+                return;
+            }
+        }
+    }
+}
+
+
+
+
+// Main game loop
 void Game::play() {
-    chooseBoxer();
+    if (!fontLoaded) {
+        std::cerr << "Font not loaded, cannot play the game.\n";
+        return;
+    }
 
-    while (player.getHealth() > 0) {
-        std::cout << "Ask a question:\n";
-        for (size_t i = 0; i < questions.size(); ++i) {
-            std::cout << i + 1 << ". " << questions[i] << "\n";
-        }
-         int questionIndex;
-        std::cin >> questionIndex;
-        --questionIndex;
+    while (window.isOpen()) {
+        chooseBoxer(); // Allow the user to choose a boxer at the start or after completing an interview
 
-        std::cout << currentBoxer->getName() << " responds: ... "
-        << currentBoxer->respondToQuestion(questions[questionIndex]) << "\n";
+        questionCount = 0;
 
-        std::cout << "Choose your response:\n"
-                  << "1. Good answer, you’ll fit right in here\n"
-                  << "2. Wow, that was something huh?\n"
-                  << "3. Interesting...\n"
-                  << "4. Maybe go back to boxing?\n";
+        while (player.getHealth() > 0) {
+            displayQuestionAndCollectAnswer();
+            questionCount++;
 
-        int response;
-        std::cin >> response;
+            // If 10 questions have been asked, prompt for another interview
+            if (questionCount >= static_cast<int>(questions.size())) {
+                std::cout << "Would you like to interview another boxer? (yes/no)\n";
+                std::string answer;
+                std::cin >> answer;
 
-        std::cout << currentBoxer->reactToResponse(response) << "\n";
-
-        if (response == 1 || response == 3) {
-            currentBoxer->increaseAppreciation(20);
-            std::cout << "The boxer seems happier.\n";
-        } else {
-            currentBoxer->increaseAnger(20);
-            std::cout << "The boxer seems angrier!\n";
+                if (answer == "yes") {
+                    break; // Break out of the inner loop to choose another boxer
+                } else {
+                    window.close(); // Close the game
+                    return;
+                }
+            }
         }
 
-        if (currentBoxer->getAngerMeter() >= 100) {
-            std::cout << currentBoxer->getName() << " punches you!\n";
-            player.decreaseHealth(rand() % 36 + 15);
-            std::cout << "Your health is now " << player.getHealth() << "\n";
+        if (!window.isOpen()) {
+            break; // Exit the game if the window is closed
         }
-
-        if (currentBoxer->getAppreciationMeter() >= 100) {
-            std::cout << currentBoxer->getName() << " gives you a hug!\n";
-            player.increaseHealth(20);
-            std::cout << "Your health is now " << player.getHealth() << "\n";
-        }
-
-        render();
     }
 
     std::cout << "Game over!\n";
