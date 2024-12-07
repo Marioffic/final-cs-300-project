@@ -1,6 +1,16 @@
 // AngryBoxer Implementation
 #include "angry_boxer.h"
 
+/*!
+ * @brief Provides a response to a specific question.
+ * 
+ * This method returns a predefined response based on the question asked.
+ * If the question is not recognized, a generic response is returned.
+ * 
+ * @param question The question being asked.
+ * @return The boxer's response to the question.
+ */
+
 std::string AngryBoxer::respondToQuestion(const std::string& question) {
     if (question == "Tell me about yourself.") {
         return "I'm Angry Avery. Life's been a fight, literally and figuratively. Don't push me.";
@@ -25,6 +35,18 @@ std::string AngryBoxer::respondToQuestion(const std::string& question) {
     }
     return "I have no idea how to answer that.";
 }
+*!
+ * @brief Reacts to a player's response.
+ * 
+ * Based on the player's response, the AngryBoxer's anger or appreciation
+ * meter is increased. The method returns the boxer's reaction to the player's input.
+ * 
+ * - Response 1 or 3 increases appreciation to 100 and returns a positive reaction.
+ * - Response 2 increases anger to 100 and returns an aggressive reaction.
+ * 
+ * @param response The player's response (1, 2, or 3).
+ * @return The boxer's reaction to the player's input.
+ */
 
 std::string AngryBoxer::reactToResponse(int response) {
     if (response == 2 || response == 2) {
