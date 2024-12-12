@@ -2,6 +2,7 @@
 #include "angry_boxer.h"
 #include "nonchalant_boxer.h"
 #include "short_boxer.h"
+#include <filesystem>
 #include <iostream>
 
 /*!
@@ -45,7 +46,13 @@ void Game::chooseBoxer() {
     boxerText.setFillColor(sf::Color::White);
     boxerText.setStyle(sf::Text::Bold);
 
-    std::vector<std::string> boxers = {"Angry Avery", "Chill Charlie", "Tiny Tim"};
+     std::vector<std::string> boxers = {"Angry Avery", "Chill Charlie", "Tiny Tim"};
+    std::vector<std::string> boxerImages = {
+        "images/tyson.png", 
+        "images/NonChalant.png", 
+        "images/short.png"
+    };
+
 
     while (window.isOpen()) {
         window.clear(sf::Color::Black);
@@ -74,6 +81,13 @@ void Game::chooseBoxer() {
                 } else if (choice == 2) {
                     currentBoxer = std::unique_ptr<ShortBoxer>(new ShortBoxer());
                 }
+                   if (!boxerTexture.loadFromFile(boxerImages[choice])) {
+                        std::cerr << "Failed to load boxer image: " << boxerImages[choice] << "\n";
+                    } else {
+                        boxerSprite.setTexture(boxerTexture);
+                        boxerSprite.setPosition(600.f, 100.f);  // Adjust position for the image
+                    }
+
                     std::cout << "You chose " << currentBoxer->getName() << "!\n";
                     return;
                 }
@@ -104,6 +118,8 @@ void Game::displayQuestionAndCollectAnswer() {
 
     while (window.isOpen()) {
         window.clear(sf::Color::Black);
+
+        window.draw(boxerSprite);
 
  
         for (size_t i = 0; i < questions.size(); ++i) {
@@ -262,15 +278,39 @@ void Game::displayHug() {
 /*!
  * @brief Displays the "you've been punched" message.
  */
-void Game::displayPunch() {
-    sf::Texture punchTexture;
-    if (!punchTexture.loadFromFile("images/short.png")) {
-        std::cerr << "Failed to load punch image!\n";
+void Game::displayBoxerImage(const std::string& imagePath) {
+    sf::Texture boxerTexture;
+
+    if (!boxerTexture.loadFromFile(imagePath)) {
+        std::cerr << "Failed to load boxer image from: " << imagePath << "\n";
         return;
     }
 
-    sf::Sprite punchSprite(punchTexture);
-    punchSprite.setPosition(200.f, 200.f);
+    sf::Sprite boxerSprite(boxerTexture);
+    boxerSprite.setPosition(200.f, 100.f); // Adjust the position as needed
+
+    window.clear(sf::Color::Black);
+    window.draw(boxerSprite);
+    window.display();
+
+    // Wait briefly to let the player see the boxer
+    sf::Clock clock;
+    while (clock.getElapsedTime().asSeconds() < 2.0f) {
+        sf::Event event;
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed) {
+                window.close();
+                return;
+            }
+        }
+    }
+}
+
+
+void Game::displayPunch() {
+     std::cerr << "displayPunch() called\n";
+
+    displayBoxerImage("images/short.png");
 
     sf::Text punchText;
     punchText.setFont(font);
@@ -280,8 +320,6 @@ void Game::displayPunch() {
     punchText.setString("YOU'VE BEEN PUNCHED!");
     punchText.setPosition(100.f, 450.f);
 
-    window.clear(sf::Color::Black);
-    window.draw(punchSprite);
     window.draw(punchText);
     window.display();
 
@@ -296,6 +334,7 @@ void Game::displayPunch() {
         }
     }
 }
+
 
 // Display the boxer's response
 void Game::displayResponse(const std::string& response) {

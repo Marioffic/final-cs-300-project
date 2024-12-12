@@ -11,6 +11,8 @@ class Game {
 private:
     sf::RenderWindow window;
     sf::Font font;
+    sf::Texture boxerTexture;  
+     sf::Sprite boxerSprite;
     bool fontLoaded;
     std::unique_ptr<Boxer> currentBoxer;
     Player player;
@@ -20,11 +22,11 @@ private:
 public:
     Game();
     void chooseBoxer();
-    void render();
     void displayQuestionAndCollectAnswer();
     void displayResponse(const std::string& response); 
     void handlePlayerReaction();
-    void displayPunch(); 
+    void displayBoxerImage(const std::string &imagePath);
+    void displayPunch();
     void displayHug();
     void play();
 };
