@@ -33,7 +33,7 @@ std::string ShortBoxer::respondToQuestion(const std::string& question) {
     return "I have no idea how to answer that.";
 }
 
-*!
+/*!
  * @brief Reacts to a player's response.
  * 
  * Based on the player's response, the ShortBoxer's anger or appreciation

@@ -35,7 +35,7 @@ std::string AngryBoxer::respondToQuestion(const std::string& question) {
     }
     return "I have no idea how to answer that.";
 }
-*!
+/*!
  * @brief Reacts to a player's response.
  * 
  * Based on the player's response, the AngryBoxer's anger or appreciation
