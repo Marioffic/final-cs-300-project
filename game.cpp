@@ -11,6 +11,13 @@
  * an error message is displayed.
  */
 
+sf::Texture texture;
+if (!texture.loadFromFile("your_background.png")) {
+    // Error handling: The image failed to load
+    std::cerr << "Error loading texture" << std::endl;
+    return 1;
+}
+
 Game::Game() : window(sf::VideoMode(800, 600), "Boxer Interview Game"), questionCount(0), fontLoaded(false), questions({
     "Tell me about yourself.",
     "What do you know about our company?",
