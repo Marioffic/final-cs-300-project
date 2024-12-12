@@ -53,6 +53,8 @@ void Game::chooseBoxer() {
         "images/short.png"
     };
 
+    
+
 
     while (window.isOpen()) {
         window.clear(sf::Color::Black);
@@ -82,11 +84,18 @@ void Game::chooseBoxer() {
                     currentBoxer = std::unique_ptr<ShortBoxer>(new ShortBoxer());
                 }
                    if (!boxerTexture.loadFromFile(boxerImages[choice])) {
-                        std::cerr << "Failed to load boxer image: " << boxerImages[choice] << "\n";
-                    } else {
-                        boxerSprite.setTexture(boxerTexture);
-                        boxerSprite.setPosition(600.f, 100.f);  // Adjust position for the image
-                    }
+    std::cerr << "Failed to load boxer image: " << boxerImages[choice] << "\n";
+} else {
+    boxerSprite.setTexture(boxerTexture);
+
+    // Scale the image to fill the screen
+    float scaleX = static_cast<float>(window.getSize().x) / boxerTexture.getSize().x;
+    float scaleY = static_cast<float>(window.getSize().y) / boxerTexture.getSize().y;
+    boxerSprite.setScale(scaleX, scaleY);
+
+    // Set position to top-left corner
+    boxerSprite.setPosition(0.f, 0.f);
+}
 
                     std::cout << "You chose " << currentBoxer->getName() << "!\n";
                     return;
@@ -376,7 +385,7 @@ void Game::play() {
         chooseBoxer(); 
         questionCount = 0;
 
-        while (player.getHealth() > 0) {
+        while (player.getHealth() > 0 && window.isOpen()) {
             displayQuestionAndCollectAnswer();
             questionCount++;
 
