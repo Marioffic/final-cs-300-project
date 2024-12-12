@@ -47,10 +47,10 @@ std::string ShortBoxer::respondToQuestion(const std::string& question) {
  */
 
 std::string ShortBoxer::reactToResponse(int response) {
-    if (response == 4 || response == 2) {
+    if (response == 4 || response == 3) {
         increaseAnger(100);
         return "Go back to boxing? I’m still punching above my weight here.";
-    } else if (response == 1 || response == 3) {
+    } else if (response == 1 || response == 2) {
         increaseAppreciation(100);
         return "Thanks. That means a lot.";
     }

@@ -14,6 +14,8 @@ public:
 
     NonchalantBoxer() : Boxer("Chill Charlie", Boxer::Type::Nonchalant, "Jab") {}
     std::string respondToQuestion(const std::string& question) override;
+    std::string reactToResponse(const std::string& question, int playerResponse) override;
+
     /*!
      * @brief Reacts to a player's response.
      * 

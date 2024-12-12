@@ -18,9 +18,9 @@ public:
 
     void increaseAnger(int amount);
     void increaseAppreciation(int amount);
+    virtual std::string reactToResponse(const std::string& question, int playerResponse) = 0;
 
     virtual std::string respondToQuestion(const std::string& question) = 0;
-    virtual std::string reactToResponse(int response) = 0;
 
     virtual ~Boxer() = default;
 protected:

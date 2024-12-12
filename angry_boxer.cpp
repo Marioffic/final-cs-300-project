@@ -49,10 +49,10 @@ std::string AngryBoxer::respondToQuestion(const std::string& question) {
  */
 
 std::string AngryBoxer::reactToResponse(int response) {
-    if (response == 2 || response == 2) {
+    if (response == 1 || response == 2) {
         increaseAnger(100);
         return "What did you mean by that? Are you mocking me?";
-    } else if (response == 1 || response == 3) {
+    } else if (response == 3 || response == 4) {
         increaseAppreciation(100);
         return "Thanks. That means a lot.";
     }
